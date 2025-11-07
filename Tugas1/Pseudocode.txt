@@ -1,0 +1,38 @@
+Mulai
+
+Input GOLONGAN
+Input JAM_LEMBUR
+
+// Tentukan gaji pokok berdasarkan golongan
+Jika GOLONGAN = 'A' maka
+    GAJI_POKOK ← 5000000
+Jika tidak, jika GOLONGAN = 'B' maka
+    GAJI_POKOK ← 6500000
+Jika tidak, jika GOLONGAN = 'C' maka
+    GAJI_POKOK ← 9500000
+Jika tidak
+    Tampilkan "Golongan tidak valid"
+    Selesai
+
+// Tentukan persentase lembur berdasarkan jam lembur
+Jika JAM_LEMBUR = 0 maka
+    PERSEN_LEMBUR ← 0.00
+Jika tidak, jika JAM_LEMBUR = 1 maka
+    PERSEN_LEMBUR ← 0.30
+Jika tidak, jika JAM_LEMBUR = 2 maka
+    PERSEN_LEMBUR ← 0.32
+Jika tidak, jika JAM_LEMBUR = 3 maka
+    PERSEN_LEMBUR ← 0.34
+Jika tidak, jika JAM_LEMBUR = 4 maka
+    PERSEN_LEMBUR ← 0.36
+Jika tidak, jika JAM_LEMBUR >= 5 maka
+    PERSEN_LEMBUR ← 0.38
+
+// Menghitung Total Penghasilan
+
+GAJI_LEMBUR ← PERSEN_LEMBUR × GAJI_POKOK
+TOTAL ← GAJI_POKOK + GAJI_LEMBUR
+
+Tampilkan "Jumlah Penghasilan: ", TOTAL
+
+Selesai
