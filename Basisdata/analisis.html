@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Regresi Linear Sederhana</title>
+    <script src="/_sdk/element_sdk.js"></script>
+    <link rel="stylesheet" href="assets/css/analisis.css">
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+    <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+</head>
+
+<body>
+    <header class="page-header">
+        <img src="IMG/Logo_Universitas_Terbuka.svg.webp" alt="Logo Universitas Terbuka" class="page-logo">
+    </header>
+
+    <main class="presentation-container">
+        <!-- Slide 1: Title -->
+        <section class="slide title-slide">
+            <h1 id="presentation-title">Analisis Regresi Linear Sederhana</h1>
+            <h2 id="subtitle">Hubungan Kebahagiaan dan Pendapatan</h2>
+            <div class="author" id="author-name">
+                Presentasi Statistik
+            </div>
+            <div class="personal-info">
+                <p><strong>Nama:</strong> Dymas Yoga Febratama</p>
+                <p><strong>NIM:</strong> 053468623</p>
+                <p><strong>Matkul:</strong> Analisis dan Visualisasi Data</p>
+            </div>
+        </section>
+
+        <!-- Slide 2: Variables -->
+        <section class="slide">
+            <h2>Variabel Penelitian</h2>
+            <div class="variables-box">
+                <ul>
+                    <li><strong>Y = Pendapatan</strong> (Variabel Terikat)</li>
+                    <li><strong>X = Kebahagiaan</strong> (Variabel Bebas)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Slide 3: Data Preparation -->
+        <section class="slide">
+            <h2>0. Persiapan Data</h2>
+            <p><strong>Wajib dilakukan sebelum analisis a–e</strong></p>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Paket yang diperlukan</span>
+<span class="function">library</span>(readxl)
+<span class="function">library</span>(dplyr)
+<span class="function">library</span>(ggplot2)
+<span class="function">library</span>(ggpubr)
+
+<span class="comment"># Baca file</span>
+data_raw &lt;- <span class="function">read_excel</span>(<span class="function">file.choose</span>())
+
+<span class="comment"># Rapikan data</span>
+data &lt;- data_raw %&gt;%
+  <span class="function">slice</span>(-1) %&gt;%
+  <span class="function">transmute</span>(
+    Pendapatan  = <span class="function">as.numeric</span>(...2),
+    Kebahagiaan = <span class="function">as.numeric</span>(...3)
+  )
+
+<span class="comment"># Cek hasil</span>
+<span class="function">str</span>(data)
+<span class="function">head</span>(data)
+                </pre>
+            </div>
+        </section>
+
+        <!-- Slide 4: Histogram -->
+        <section class="slide">
+            <h2>a. Histogram Variabel Terikat (Pendapatan)</h2>
+
+            <h3>Code (a)</h3>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Histogram Pendapatan</span>
+<span class="function">ggplot</span>(data, <span class="function">aes</span>(x = Pendapatan)) +
+  <span class="function">geom_histogram</span>(bins = 30,
+                    color = <span class="string">"black"</span>,
+                    fill  = <span class="string">"white"</span>) +
+  <span class="function">labs</span>(
+    title = <span class="string">"Histogram Pendapatan"</span>,
+    x     = <span class="string">"Pendapatan"</span>,
+    y     = <span class="string">"Frekuensi"</span>
+  )
+                </pre>
+            </div>
+
+            <h3>Penjelasan (a)</h3>
+            <div class="explanation-box">
+                <p>
+                    Histogram pada Gambar 1 memperlihatkan sebaran nilai Pendapatan untuk 498 responden.
+                    Sebagian besar data berada pada kisaran nilai menengah, sedangkan data dengan nilai sangat
+                    rendah atau sangat tinggi relatif lebih sedikit. Bentuk histogram tampak cukup halus dengan
+                    satu puncak utama dan tidak menunjukkan pencilan (outlier) yang ekstrem. Secara umum,
+                    distribusi Pendapatan <strong>masih cukup wajar</strong> dan tidak terlalu menyimpang,
+                    sehingga dapat digunakan dalam analisis regresi linear sederhana dengan catatan interpretasi
+                    dilakukan secara hati-hati.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 5: Scatter Plot -->
+        <section class="slide">
+            <h2>b. Scatter Plot Kebahagiaan vs Pendapatan</h2>
+
+            <h3>Code (b)</h3>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Scatter plot Kebahagiaan (X) vs Pendapatan (Y)</span>
+<span class="function">ggplot</span>(data, <span class="function">aes</span>(x = Kebahagiaan, y = Pendapatan)) +
+  <span class="function">geom_point</span>() +
+  <span class="function">labs</span>(
+    title = <span class="string">"Scatter Plot Kebahagiaan vs Pendapatan"</span>,
+    x     = <span class="string">"Kebahagiaan"</span>,
+    y     = <span class="string">"Pendapatan"</span>
+  )
+                </pre>
+            </div>
+
+            <h3>Penjelasan (b)</h3>
+            <div class="explanation-box">
+                <p>
+                    Scatter plot pada Gambar 2 menampilkan hubungan antara Kebahagiaan dan Pendapatan.
+                    Titik-titik data cenderung membentuk pola yang
+                    <strong>menaik dari kiri bawah ke kanan atas</strong>, artinya ketika nilai Kebahagiaan
+                    meningkat, Pendapatan juga cenderung ikut meningkat. Pola ini mengindikasikan adanya
+                    <strong>hubungan linear positif</strong> antara Kebahagiaan dan Pendapatan, sehingga
+                    penggunaan model regresi linear sederhana cukup sesuai untuk menggambarkan hubungan kedua
+                    variabel tersebut.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 6: Linear Regression -->
+        <section class="slide">
+            <h2>c. Regresi Linear Sederhana</h2>
+
+            <h3>Code (c)</h3>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Model regresi linear sederhana</span>
+model &lt;- <span class="function">lm</span>(Pendapatan ~ Kebahagiaan, data = data)
+
+<span class="comment"># Ringkasan hasil model</span>
+<span class="function">summary</span>(model)
+                </pre>
+            </div>
+
+            <div class="results-grid">
+                <div class="result-card">
+                    <h4>Intercept</h4>
+                    <div class="result-value">0.91927</div>
+                </div>
+                <div class="result-card">
+                    <h4>Koefisien Kebahagiaan</h4>
+                    <div class="result-value">1.04608</div>
+                </div>
+                <div class="result-card">
+                    <h4>R-squared</h4>
+                    <div class="result-value">0.7452</div>
+                </div>
+                <div class="result-card">
+                    <h4>Adjusted R-squared</h4>
+                    <div class="result-value">0.7447</div>
+                </div>
+            </div>
+
+            <div class="formula">
+                Ŷ = 0.91927 + 1.04608 × Kebahagiaan
+            </div>
+
+            <h3>Penjelasan (c)</h3>
+            <div class="explanation-box">
+                <p>
+                    Berdasarkan hasil regresi linear sederhana diperoleh persamaan di atas. Koefisien Kebahagiaan
+                    sebesar 1,04608 berarti bahwa <strong>setiap kenaikan 1 satuan skor Kebahagiaan akan
+                    meningkatkan Pendapatan rata-rata sekitar 1,046 satuan</strong>, dengan asumsi faktor lain
+                    tetap. Nilai p-value yang sangat kecil (p &lt; 0,001) menunjukkan bahwa
+                    <strong>Kebahagiaan berpengaruh signifikan terhadap Pendapatan</strong>. Nilai R-squared
+                    sebesar 0,7452 mengindikasikan bahwa sekitar <strong>74,52% variasi Pendapatan mampu
+                    dijelaskan oleh Kebahagiaan</strong> dalam model, sedangkan sisanya dijelaskan oleh faktor
+                    lain di luar model.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 7: Homoskedastisitas -->
+        <section class="slide">
+            <h2>d. Pemeriksaan Homoskedastisitas</h2>
+
+            <h3>Code (d)</h3>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Plot diagnostik khusus Residuals vs Fitted</span>
+<span class="function">plot</span>(model, which = 1)
+                </pre>
+            </div>
+
+            <h3>Penjelasan (d)</h3>
+            <div class="explanation-box">
+                <p>
+                    Grafik <em>Residuals vs Fitted</em> digunakan untuk mengecek asumsi homoskedastisitas,
+                    yaitu apakah varians residual konstan di seluruh rentang nilai prediksi. Pada grafik,
+                    titik-titik residual tampak menyebar di sekitar garis nol, baik di atas maupun di bawah,
+                    tanpa pola “kipas” yang jelas. Meskipun garis halus sedikit menurun pada nilai fitted yang
+                    tinggi, sebaran titik secara umum masih acak.
+                    Oleh karena itu, dapat disimpulkan bahwa
+                    <strong>asumsi homoskedastisitas secara umum cukup terpenuhi</strong>
+                    pada model regresi linear sederhana Pendapatan terhadap Kebahagiaan, sehingga model masih
+                    layak digunakan untuk keperluan analisis dan interpretasi.
+                </p>
+            </div>
+        </section>
+
+        <!-- Slide 8: Visualisasi Hasil Regresi -->
+        <section class="slide">
+            <h2>e. Visualisasi Hasil Regresi</h2>
+
+            <h3>Code (e)</h3>
+            <div class="code-block">
+                <pre>
+<span class="comment"># Visualisasi: titik data + garis regresi + persamaan garis</span>
+<span class="function">ggplot</span>(data, <span class="function">aes</span>(x = Kebahagiaan, y = Pendapatan)) +
+  <span class="function">geom_point</span>() +
+  <span class="function">geom_smooth</span>(method = <span class="string">"lm"</span>, se = FALSE) +
+  <span class="function">stat_regline_equation</span>(
+    <span class="function">aes</span>(label = ..eq.label..),
+    label.x = 1.5, label.y = 7.5
+  ) +
+  <span class="function">labs</span>(
+    title = <span class="string">"Hubungan antara Kebahagiaan dan Pendapatan"</span>,
+    x     = <span class="string">"Kebahagiaan"</span>,
+    y     = <span class="string">"Pendapatan"</span>
+  ) +
+  <span class="function">theme_minimal</span>()
+                </pre>
+            </div>
+
+            <h3>Penjelasan (e)</h3>
+            <div class="explanation-box">
+                <p>
+                    Gambar 4 menampilkan scatter plot antara Kebahagiaan dan Pendapatan yang dilengkapi dengan garis
+                    regresi linear. Titik-titik pada grafik merepresentasikan data observasi, sedangkan garis regresi
+                    menggambarkan pola hubungan rata-rata yang diperkirakan oleh model. Kemiringan garis yang positif
+                    konsisten dengan koefisien Kebahagiaan yang juga bernilai positif, sehingga menguatkan kesimpulan
+                    bahwa peningkatan Kebahagiaan cenderung diikuti oleh peningkatan Pendapatan.
+                    Persamaan garis regresi ditampilkan langsung di dalam grafik sehingga pembaca dapat melihat bentuk
+                    hubungan matematis tanpa harus membuka output numerik di konsol. Judul dan label sumbu X–Y
+                    memperjelas informasi yang disajikan dan membuat grafik lebih mudah dipahami.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">8</span>
+    </div>
+
+    <nav class="navigation">
+        <button class="nav-btn" id="prev-btn" onclick="previousSlide()">&larr; Sebelumnya</button>
+        <button class="nav-btn" id="next-btn" onclick="nextSlide()">Selanjutnya &rarr;</button>
+    </nav>
+
+    <script defer src="assets/js/analisis.js"></script>
+
+    <!-- script bawaan platform -->
+    <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'99f7313c843bbd75',t:'MTc2MzI5ODI0Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
+</body>
+
+</html>
+
+
+
